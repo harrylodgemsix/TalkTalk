@@ -50,14 +50,24 @@ class dv360ConnectorForAzure():
             body=self.report_definition).execute()
         self.report_id = report["queryId"]
 
-    def download_and_upload_report(self, report_id, account_url, container_name, file_path, file_name):
+    def download_and_upload_report(
+            self,
+            report_id,
+            account_url,
+            container_name,
+            file_path,
+            file_name):
         self.report_id = report_id
 
         getquery = (self.dbm_service.queries().getquery(
             queryId=self.report_id).execute())
 
-        df = pd.read_csv(getquery["metadata"]
-                         ["googleCloudStoragePathForLatestReport"], dtype={"Insertion Order ID": "str", "Line Item ID": "str", "YouTube Ad Group ID": "str"})
+        df = pd.read_csv(
+            getquery["metadata"]["googleCloudStoragePathForLatestReport"],
+            dtype={
+                "Insertion Order ID": "str",
+                "Line Item ID": "str",
+                "YouTube Ad Group ID": "str"})
         df = df[:-20]
         df["Date"] = pd.to_datetime(df["Date"]).dt.strftime("%d/%m/%G")
 
@@ -66,7 +76,13 @@ class dv360ConnectorForAzure():
         self.__upload_with_default_azure_credential(
             account_url, container_name, file_path, file_name, output)
 
-    def __upload_with_default_azure_credential(self, account_url, container_name, file_path, file_name, data):
+    def __upload_with_default_azure_credential(
+            self,
+            account_url,
+            container_name,
+            file_path,
+            file_name,
+            data):
         credential = DefaultAzureCredential()
         blob_client = BlobClient(
             account_url, container_name, file_path + file_name, credential)

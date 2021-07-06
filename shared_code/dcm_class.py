@@ -66,7 +66,12 @@ class dcmConnectorForAzure():
             if profile["accountId"] == str(self.dcm_account_id):
                 self.profile_id = profile["profileId"]
 
-    def create_and_run_report(self, start_date, end_date, metric_names, dimension_names):
+    def create_and_run_report(
+            self,
+            start_date,
+            end_date,
+            metric_names,
+            dimension_names):
         service = self.service
         report = {
             'name': 'dcm_daily_report',
@@ -95,7 +100,12 @@ class dcmConnectorForAzure():
         report_file = service.reports().run(profileId=self.profile_id,
                                             reportId=self.report_id).execute()
 
-    def create_and_run_reach_report(self, start_date, end_date, metric_names, dimension_names):
+    def create_and_run_reach_report(
+            self,
+            start_date,
+            end_date,
+            metric_names,
+            dimension_names):
         service = self.service
         report = {
             'name': 'dcm_daily_reach_report',
@@ -124,7 +134,13 @@ class dcmConnectorForAzure():
         report_file = service.reports().run(profileId=self.profile_id,
                                             reportId=self.report_id).execute()
 
-    def create_and_run_floodlight_report(self, start_date, end_date, metric_names, dimension_names, floodlightConfigId):
+    def create_and_run_floodlight_report(
+            self,
+            start_date,
+            end_date,
+            metric_names,
+            dimension_names,
+            floodlightConfigId):
         service = self.service
         report = {
             'name': 'dcm_daily_floodlight_report',
@@ -157,7 +173,13 @@ class dcmConnectorForAzure():
         report_file = service.reports().run(profileId=self.profile_id,
                                             reportId=self.report_id).execute()
 
-    def download_report_upload_to_azure(self, report_id, account_url, container_name, file_path, file_name):
+    def download_report_upload_to_azure(
+            self,
+            report_id,
+            account_url,
+            container_name,
+            file_path,
+            file_name):
         service = self.service
         request = service.reports().files().list(
             profileId=self.profile_id, reportId=report_id).execute()
@@ -187,13 +209,25 @@ class dcmConnectorForAzure():
 
         return output
 
-    def __upload_with_default_azure_credential(self, account_url, container_name, file_path, file_name, data):
+    def __upload_with_default_azure_credential(
+            self,
+            account_url,
+            container_name,
+            file_path,
+            file_name,
+            data):
         credential = DefaultAzureCredential()
         blob_client = BlobClient(
             account_url, container_name, file_path + file_name, credential)
         blob_client.upload_blob(data)
 
-    def __upload_with_sas(self, account_url, file_path, file_name, sas_token, data):
+    def __upload_with_sas(
+            self,
+            account_url,
+            file_path,
+            file_name,
+            sas_token,
+            data):
         sas_url = account_url + file_path + file_name + '?' + sas_token
         encoded_data = data.encode("utf-8")
         content_type_string = ContentSettings()
@@ -206,7 +240,12 @@ class dcmConnectorForAzure():
                    )
         return print(r.text)
 
-    def __download_with_sas(self, account_url, file_path, file_name, sas_token):
+    def __download_with_sas(
+            self,
+            account_url,
+            file_path,
+            file_name,
+            sas_token):
         sas_url = account_url + file_path + file_name + '?' + sas_token
         with urlopen(sas_url) as response:
             id = response.read()
