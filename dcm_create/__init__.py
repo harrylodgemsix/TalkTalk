@@ -25,11 +25,10 @@ end_date = date.today() - timedelta(days=1)
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     req_json = req.get_json()
-    logging
     account_id = req_json.get("account_id")
 
     dcm = dcm_class.dcmConnectorForAzure(account_id, JSON_KEY_VALUE)
     dcm.authenticate_using_service_account()
     dcm.create_and_run_report(start_date, end_date, metric_names, dimensions)
 
-    return func.HttpResponse(json.dumps({"report_id": int(dcm.report_id), "upload_folder": "dcm"}))
+    return func.HttpResponse(json.dumps({"account_id": int(dcm.dcm_account_id), "report_id": int(dcm.report_id), "upload_folder": "dcm"}))
