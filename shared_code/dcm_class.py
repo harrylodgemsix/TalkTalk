@@ -63,7 +63,7 @@ class dcmConnectorForAzure():
         response = request.execute()
 
         for profile in response['items']:
-            if profile["accountId"] == self.dcm_account_id:
+            if profile["accountId"] == str(self.dcm_account_id):
                 self.profile_id = profile["profileId"]
 
     def create_and_run_report(self, start_date, end_date, metric_names, dimension_names):
@@ -192,8 +192,6 @@ class dcmConnectorForAzure():
         blob_client = BlobClient(
             account_url, container_name, file_path + file_name, credential)
         blob_client.upload_blob(data)
-
-        return
 
     def __upload_with_sas(self, account_url, file_path, file_name, sas_token, data):
         sas_url = account_url + file_path + file_name + '?' + sas_token
