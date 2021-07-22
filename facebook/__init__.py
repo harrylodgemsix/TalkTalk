@@ -35,7 +35,7 @@ def main(req: func.HttpRequest):
     else:
         ad_account = "act_" + req_body.get("ad_account")
 
-    file_path = req_body.get("file_path")
+    file_path = "/new/fb/"
 
     for i in dates_to_query:
         fb = fbConnectorForAzure(i, ad_account, access_token, app_id, app_secret,
